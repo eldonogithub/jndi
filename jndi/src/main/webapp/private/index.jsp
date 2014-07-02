@@ -74,7 +74,7 @@ li>a {
 						<x:forEach select="$rss//item" varStatus="s">
 							<c:catch>
 								<fmt:parseDate var="d" pattern="yyyy-MM-dd'T'HH:mm:ss">
-									<x:out select="$s/name()='dc:date'" />
+									<x:out select="//*[name()='dc:date']" />
 								</fmt:parseDate>
 							</c:catch>
 							<c:set var="parity"
