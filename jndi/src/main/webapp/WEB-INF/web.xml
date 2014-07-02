@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	version="3.0">
+	<description>JNDI Example Application</description>
+	<display-name>JNDI Example</display-name>
+
+
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+
+	<servlet>
+		<description>Servlet to handle web queries</description>
+		<display-name>Jndi Servlet</display-name>
+		<servlet-name>JndiServlet</servlet-name>
+		<servlet-class>ca.blackperl.servlet.JndiServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>JndiServlet</servlet-name>
+		<url-pattern>*.go</url-pattern>
+	</servlet-mapping>
+
+	<filter>
+		<filter-name>RemoteIpFilter</filter-name>
+		<filter-class>org.apache.catalina.filters.RemoteIpFilter</filter-class>
+	</filter>
+
+	<filter>
+		<description>This filter updates the outgoing html response URLs with a CSRF_ONCE id</description>
+		<display-name>Cross Site Request Forgery Filter</display-name>
+		<filter-name>CsrfPreventionFilter</filter-name>
+		<filter-class>org.apache.catalina.filters.CsrfPreventionFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>RemoteIpFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<resource-ref>
+		<description>Resource reference to a factory 
+		for java.sql.Connection instances that may be used 
+		for talking to a particular database that is configured in 
+		the configuration for the web application.</description>
+		<res-ref-name>test1</res-ref-name>
+		<res-type>javax.sql.Datasource</res-type>
+		<res-auth>Container</res-auth>
+		<res-sharing-scope>Shareable</res-sharing-scope>
+	</resource-ref>
+
+	<security-role>
+		<role-name>role1</role-name>
+	</security-role>
+
+	<security-constraint>
+		<display-name>https_required</display-name>
+		<web-resource-collection>
+			<web-resource-name>all</web-resource-name>
+			<description>private data</description>
+			<url-pattern>/private/*</url-pattern>
+		</web-resource-collection>
+
+		<auth-constraint>
+			<role-name>role1</role-name>
+		</auth-constraint>
+
+		<user-data-constraint>
+			<description>Ensure HTTPS</description>
+			<transport-guarantee>CONFIDENTIAL</transport-guarantee>
+		</user-data-constraint>
+	</security-constraint>
+
+	<login-config>
+		<auth-method>FORM</auth-method>
+		<form-login-config>
+			<form-login-page>/login/login.go</form-login-page>
+			<form-error-page>/login/loginError.go</form-error-page>
+		</form-login-config>
+	</login-config>
+
+	<session-config>
+		<session-timeout>1</session-timeout>
+		<cookie-config>
+			<comment>Whois Cookie</comment>
+			<http-only>true</http-only>
+			<secure>true</secure>
+			<max-age>30</max-age>
+		</cookie-config>
+		<tracking-mode>COOKIE</tracking-mode>
+	</session-config>
+
+	<jsp-config>
+		<jsp-property-group>
+			<url-pattern>*.jsp</url-pattern>
+			<scripting-invalid>false</scripting-invalid>
+		</jsp-property-group>
+	</jsp-config>
+
+</web-app>

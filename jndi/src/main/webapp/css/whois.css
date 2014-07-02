@@ -1,0 +1,5 @@
+@CHARSET "ISO-8859-1";
+
+ul > li {
+	list-style: none;
+}
